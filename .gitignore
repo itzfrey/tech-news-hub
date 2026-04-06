@@ -1,0 +1,11 @@
+# Node
+node_modules/
+
+config.js
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# ESLint cache
+.eslintcache
