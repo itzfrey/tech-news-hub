@@ -33,6 +33,8 @@ export class BookmarkManager {
         }
     }
 
+    
+
     /**
      * Removes an article from bookmarks
      * @param {string} articleId - ID of article to remove

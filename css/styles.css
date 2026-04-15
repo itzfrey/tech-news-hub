@@ -327,6 +327,12 @@ body {
     gap: var(--spacing-lg);
 }
 
+.article__author {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
 /* ============================================
    ARTICLE CARD
    ============================================ */
@@ -400,6 +406,23 @@ body {
 
 .article__bookmark:hover {
     transform: scale(1.2);
+}
+
+.skip__link {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--color-accent);
+    color: #ffffff;
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    z-index: 9999;
+    transition: top 0.3s;
+}
+
+.skip__link:focus {
+    top: 0;
 }
 
 /* ============================================
@@ -532,6 +555,14 @@ body {
 
 .modal__link:hover {
     background-color: #0088cc;
+}
+
+footer {
+    background-color: var(--color-primary);
+    color: var(--color-surface);
+    padding: 1rem;
+    text-align: center;
+
 }
 
 /* ============================================

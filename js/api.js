@@ -40,7 +40,7 @@ export async function fetchHackerNews() {
     const stories = await Promise.all(ids.map(id => fetchHackerNewsStory(id)));
 
     return stories
-        .filter(story => story && story.url) // remove stories with no URL
+        .filter(story => story && story.url)
         .map(story => ({
             id: `hn-${story.id}`,
             title: story.title,
@@ -50,6 +50,33 @@ export async function fetchHackerNews() {
             date: new Date(story.time * 1000).toLocaleDateString(),
             comments: story.descendants ?? 0,
             score: story.score ?? 0,
+            tag: 'technology',
+            author: story.by ?? 'unknown'
+        }));
+}
+
+/**
+ * Fetches and formats top stories from Hacker News
+ * @returns {Promise<Array>} Array of formatted article objects
+ */
+export async function fetchHackerNewsBest() {
+    const response = await fetch('https://hacker-news.firebaseio.com/v0/beststories.json');
+    if (!response.ok) throw new Error('Failed to fetch Hacker News best stories');
+    const ids = await response.json();
+    const stories = await Promise.all(ids.slice(0, 10).map(id => fetchHackerNewsStory(id)));
+    return stories
+        .filter(story => story && story.url)
+        .map(story => ({
+            id: `hn-best-${story.id}`,
+            title: story.title,
+            description: `⭐ Best Story · ${story.score} points · ${story.descendants ?? 0} comments`,
+            url: story.url,
+            source: 'Hacker News',
+            date: new Date(story.time * 1000).toLocaleDateString(),
+            comments: story.descendants ?? 0,
+            score: story.score ?? 0,
+            tag: 'technology',  
+            author: story.by ?? 'unknown'
         }));
 }
 
@@ -76,6 +103,8 @@ export async function fetchDevTo() {
         date: new Date(article.published_at).toLocaleDateString(),
         comments: article.comments_count ?? 0,
         score: article.positive_reactions_count ?? 0,
+        tag: article.tag_list?.[0] ?? 'technology',  
+        author: article.user?.name ?? 'unknown'
     }));
 }
 
@@ -103,6 +132,8 @@ export async function fetchNYTimes() {
         date: new Date(article.pub_date).toLocaleDateString(),
         comments: 0,
         score: 0,
+        tag: article.section_name ?? 'technology',  
+        author: article.byline?.original ?? 'unknown'
     }));
 }
 
@@ -116,15 +147,18 @@ export async function fetchNYTimes() {
  */
 export async function fetchAllArticles() {
     const results = await Promise.allSettled([
-        fetchHackerNews(),
-        fetchDevTo(),
-        fetchNYTimes()
+        fetchHackerNews(),        // endpoint 1 — top stories
+        fetchHackerNewsBest(),    // endpoint 2 — best stories
+        fetchDevTo(),             // endpoint 3 — dev.to
+        fetchNYTimes()            // endpoint 4 — ny times
     ]);
 
-    // allSettled won't fail if one API fails — others still load
     const articles = results
         .filter(result => result.status === 'fulfilled')
         .flatMap(result => result.value);
 
-    return articles;
+    // Remove duplicates by id
+    return articles.filter((article, index, self) =>
+        index === self.findIndex(a => a.id === article.id)
+    );
 }

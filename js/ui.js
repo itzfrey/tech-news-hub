@@ -54,6 +54,7 @@ export function createArticleCard(article) {
         <span class="article__source">${article.source}</span>
         <h2 class="article__title">${article.title}</h2>
         <p class="article__description">${article.description || 'No description available.'}</p>
+        <p class="article__author">✍️ ${article.author}</p>
         <div class="article__meta">
             <span class="article__date">📅 ${article.date}</span>
             <span class="article__comments">💬 ${article.comments}</span>
