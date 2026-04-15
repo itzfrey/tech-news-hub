@@ -1,71 +1,79 @@
 // ============================================
 // DATA MANAGEMENT MODULE - Tech News Hub
 // Handles all localStorage operations
-// ============================================
-
-const BOOKMARKS_KEY = 'techNewshub_bookmarks';
-
-// ============================================
-// BOOKMARKS
+// Uses classes for organized data management
 // ============================================
 
 /**
- * Retrieves all bookmarks from localStorage
- * @returns {Array} Array of bookmarked article objects
+ * Manages bookmark storage using localStorage
  */
-export function getBookmarks() {
-    return JSON.parse(localStorage.getItem(BOOKMARKS_KEY) || '[]');
-}
+export class BookmarkManager {
+    constructor() {
+        this.storageKey = 'techNewsHub_bookmarks';
+    }
 
-/**
- * Saves an article to bookmarks in localStorage
- * @param {Object} article - Article object to save
- */
-export function saveBookmark(article) {
-    const bookmarks = getBookmarks();
-    const alreadySaved = bookmarks.some(b => b.id === article.id);
-    if (!alreadySaved) {
-        bookmarks.push(article);
-        localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(bookmarks));
+    /**
+     * Retrieves all bookmarks from localStorage
+     * @returns {Array} Array of bookmarked article objects
+     */
+    getAll() {
+        return JSON.parse(localStorage.getItem(this.storageKey) || '[]');
+    }
+
+    /**
+     * Saves an article to bookmarks
+     * @param {Object} article - Article object to save
+     */
+    save(article) {
+        const bookmarks = this.getAll();
+        const alreadySaved = bookmarks.some(b => b.id === article.id);
+        if (!alreadySaved) {
+            bookmarks.push(article);
+            localStorage.setItem(this.storageKey, JSON.stringify(bookmarks));
+        }
+    }
+
+    /**
+     * Removes an article from bookmarks
+     * @param {string} articleId - ID of article to remove
+     */
+    remove(articleId) {
+        const bookmarks = this.getAll();
+        const updated = bookmarks.filter(b => b.id !== articleId);
+        localStorage.setItem(this.storageKey, JSON.stringify(updated));
+    }
+
+    /**
+     * Checks if an article is bookmarked
+     * @param {string} articleId - ID of article to check
+     * @returns {boolean} True if bookmarked
+     */
+    isBookmarked(articleId) {
+        return this.getAll().some(b => b.id === articleId);
     }
 }
 
 /**
- * Removes an article from bookmarks in localStorage
- * @param {string} articleId - ID of the article to remove
+ * Manages theme preference using localStorage
  */
-export function removeBookmark(articleId) {
-    const bookmarks = getBookmarks();
-    const updated = bookmarks.filter(b => b.id !== articleId);
-    localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(updated));
-}
+export class ThemeManager {
+    constructor() {
+        this.storageKey = 'techNewsHub_theme';
+    }
 
-/**
- * Checks if an article is bookmarked
- * @param {string} articleId - ID of the article to check
- * @returns {boolean} True if bookmarked
- */
-export function isBookmarked(articleId) {
-    const bookmarks = getBookmarks();
-    return bookmarks.some(b => b.id === articleId);
-}
+    /**
+     * Saves theme preference
+     * @param {string} theme - 'dark' or 'light'
+     */
+    save(theme) {
+        localStorage.setItem(this.storageKey, theme);
+    }
 
-// ============================================
-// THEME PREFERENCE
-// ============================================
-
-/**
- * Saves theme preference to localStorage
- * @param {string} theme - 'dark' or 'light'
- */
-export function saveTheme(theme) {
-    localStorage.setItem('techNewsHub_theme', theme);
-}
-
-/**
- * Retrieves saved theme preference from localStorage
- * @returns {string} 'dark' or 'light'
- */
-export function getTheme() {
-    return localStorage.getItem('techNewsHub_theme') || 'light';
+    /**
+     * Retrieves saved theme preference
+     * @returns {string} 'dark' or 'light'
+     */
+    get() {
+        return localStorage.getItem(this.storageKey) || 'light';
+    }
 }

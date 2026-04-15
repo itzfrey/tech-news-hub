@@ -4,7 +4,10 @@
 // ============================================
 
 import { loadArticles, renderArticles, openModal, closeModal, allArticles } from './ui.js';
-import { saveBookmark, removeBookmark, getBookmarks } from './dataManagement.js';
+import { BookmarkManager } from './dataManagement.js';
+
+// renamed to bookmarkManager to avoid naming conflicts
+const bookmarkManager = new BookmarkManager();
 
 // ============================================
 // FILTER & SORT HELPERS
@@ -68,13 +71,12 @@ function handleBookmarkClick(articleId) {
     const article = allArticles.find(a => a.id === articleId);
     if (!article) return;
 
-    const bookmarks = getBookmarks();
-    const isBookmarked = bookmarks.some(b => b.id === articleId);
+    const isBookmarked = bookmarkManager.isBookmarked(articleId);
 
     if (isBookmarked) {
-        removeBookmark(articleId);
+        bookmarkManager.remove(articleId);
     } else {
-        saveBookmark(article);
+        bookmarkManager.save(article);
     }
 
     // Re-render to update bookmark icons
@@ -90,8 +92,8 @@ function handleBookmarkClick(articleId) {
  * Renders saved bookmarks view in the articles grid
  */
 function showBookmarksView() {
-    const bookmarks = getBookmarks();
-    renderArticles(bookmarks);
+    const saved = bookmarkManager.getAll();
+    renderArticles(saved);
 }
 
 // ============================================

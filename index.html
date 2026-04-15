@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Tech News Hub - Your one stop platform for the latest technology news from Hacker News, DEV.to, and The New York Times.">
+
+    <!-- Open Graph (looks good when shared on social media) -->
+    <meta property="og:title" content="Tech News Hub">
+    <meta property="og:description" content="Your one stop platform for the latest technology news.">
+    <meta property="og:type" content="website">
+
     <title>Tech News Hub</title>
     <meta name="Author" content="Godfrey Hogan Eyo">
 
@@ -11,6 +17,8 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+    <!-- Skip to main content for screen readers -->
+    <a href="#main" class="skip__link">Skip to main content</a>
 
     <!-- HEADER -->
     <header class="header">
@@ -36,7 +44,7 @@
     </header>
 
     <!-- MAIN -->
-    <main class="main">
+    <main class="main" id="main">
 
         <!-- SIDEBAR FILTERS -->
         <aside class="sidebar" aria-label="Filter articles">
@@ -99,13 +107,15 @@
         <div class="modal__content">
             <button class="modal__close" id="modalClose" aria-label="Close modal">✕</button>
             <span class="modal__source" id="modalSource"></span>
-            <h2 class="modal__title" id="modalTitle"></h2>
+            <h2 class="modal__title" id="modalTitle">
+                <span class="visually-hidden">Article title</span>
+            </h2>
             <p class="modal__description" id="modalDescription"></p>
             <div class="modal__meta">
                 <span id="modalDate"></span>
                 <span id="modalComments"></span>
             </div>
-            <a class="modal__link" id="modalLink" target="_blank" rel="noopener noreferrer">Read Full Article →</a>
+            <a href="#" class="modal__link" id="modalLink" target="_blank" rel="noopener noreferrer">Read Full Article →</a>
         </div>
     </div>
 

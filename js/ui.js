@@ -4,6 +4,7 @@
 // ============================================
 
 import { fetchAllArticles } from './api.js';
+import { BookmarkManager } from './dataManagement.js';
 
 // ============================================
 // STATE
@@ -46,8 +47,8 @@ export function createArticleCard(article) {
     card.dataset.id = article.id;
 
     // Check if bookmarked
-    const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
-    const isBookmarked = bookmarks.some(b => b.id === article.id);
+    const bookmarkManager = new BookmarkManager();
+    const isBookmarked = bookmarkManager.isBookmarked(article.id);
 
     card.innerHTML = `
         <span class="article__source">${article.source}</span>

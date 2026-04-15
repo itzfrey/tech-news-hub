@@ -1,9 +1,20 @@
 import js from "@eslint/js";
 import globals from "globals";
-import css from "@eslint/css";
-import { defineConfig } from "eslint/config";
 
-export default defineConfig([
-  { files: ["**/*.{js,mjs,cjs}"], plugins: { js }, extends: ["js/recommended"], languageOptions: { globals: globals.browser } },
-  { files: ["**/*.css"], plugins: { css }, language: "css/css", extends: ["css/recommended"] },
-]);
+export default [
+    js.configs.recommended,
+    {
+        languageOptions: {
+            globals: {
+                ...globals.browser,
+            },
+            ecmaVersion: 2020,
+            sourceType: "module",
+        },
+        rules: {
+            "no-unused-vars": "warn",
+            "no-console": "off",
+            "no-undef": "error",
+        }
+    }
+];

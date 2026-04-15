@@ -3,7 +3,8 @@
 // Handles dark/light mode switching
 // ============================================
 
-import { saveTheme, getTheme } from './dataManagement.js';
+import { ThemeManager } from './dataManagement.js';
+const themeManager = new ThemeManager();
 
 /**
  * Applies the given theme to the document body
@@ -26,9 +27,9 @@ function applyTheme(theme) {
  * Toggles between dark and light mode
  */
 function toggleTheme() {
-    const current = getTheme();
+    const current = themeManager.get();
     const next = current === 'dark' ? 'light' : 'dark';
-    saveTheme(next);
+    themeManager.save(next);
     applyTheme(next);
 }
 
@@ -36,7 +37,7 @@ function toggleTheme() {
  * Initializes theme on page load from saved preference
  */
 export function initTheme() {
-    const saved = getTheme();
+    const saved = themeManager.save();
     applyTheme(saved);
 
     document.getElementById('themeToggle').addEventListener('click', toggleTheme);
